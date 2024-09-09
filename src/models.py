@@ -19,6 +19,7 @@ class Post(Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship(User)
 
 class Comment(Base):
     __tablename__ = 'comment'
@@ -26,6 +27,8 @@ class Comment(Base):
     comment_text = Column(Text, nullable=False)
     author_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
+    author = relationship(User)
+    post = relationship(Post)
 
 class Follower(Base):
     __tablename__ = 'follower'
@@ -34,6 +37,8 @@ class Follower(Base):
     __table_args__ = (
         PrimaryKeyConstraint('user_FROM_id', 'user_TO_id'),
     )
+    user_from = relationship(User, foreign_keys=[user_FROM_id])
+    user_to = relationship(User, foreign_keys=[user_TO_id])
 
 class Media(Base):
     __tablename__ = 'media'
@@ -41,6 +46,7 @@ class Media(Base):
     type = Column(Enum('image', 'video', 'audio', name='media_type'))
     url = Column(Text, nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
+    post = relationship(Post)
 
 ## Draw from SQLAlchemy base
 try:
